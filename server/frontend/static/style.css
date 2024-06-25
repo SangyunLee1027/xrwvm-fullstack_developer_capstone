@@ -14,10 +14,25 @@ img{
 }
 
 .profile-image{
-    width:100px;
-    height: 100px;
+    width: 150;
+    height: 150px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 15px;
+    margin-right: 45px;
 }
 
+.contact-body{
+    border-left-style: solid;
+    border-left-width: 3px;
+    align-items: center;
+    text-align: center;
+    padding-left: 60px;
+    font-size: 15px;
+    margin-bottom: 50px;
+    margin-left: 30px;
+    margin-top: 50px;
+}
 
 .row{
   display: flex;  
