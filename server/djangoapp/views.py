@@ -1,7 +1,6 @@
 # Uncomment the required imports before adding the code
 
 from django.contrib.auth.models import User
-from django.shortcuts import render
 from django.contrib.auth import logout
 
 from django.http import JsonResponse
@@ -28,7 +27,7 @@ def login_user(request):
     username = data['userName']
     password = data['password']
     # Try to check if provide credential can be authenticated
-    user = authenticate(username = username, password = password)
+    user = authenticate(username=username, password=password)
     data = {"userName": username}
     if user is not None:
         # If user is valid, call login method to login current user
@@ -49,7 +48,7 @@ def logout_request(request):
 def registration(request):
     data = json.loads(request.body)
     username = data["userName"]
-    password =  data["password"]
+    password = data["password"]
     first_name = data['firstName']
     last_name = data['lastName']
     email = data['email']
@@ -58,13 +57,17 @@ def registration(request):
         # Check if user already exists
         User.objects.get(username=username)
         username_exist = True
-    except:
+    except Exception as err:
         # If not, simply log this is a new user
         logger.debug("{} is new user".format(username))
     # If it is a new user
     if not username_exist:
         # Create user in auth_user table
-        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,password=password, email=email)
+        user = User.objects.create_user(username = username,
+                                        first_name = first_name,
+                                        last_name = last_name,
+                                        password = password,
+                                        email = email)
         # Login the user and redirect to list page
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
@@ -83,7 +86,8 @@ def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = []
     for car_model in car_models:
-        cars.append({"CarModel": car_model.name, "CarMake": car_model.car_make.name})
+        cars.append({"CarModel": car_model.name, 
+                     "CarMake": car_model.car_make.name})
     return JsonResponse({"CarModels": cars})
 
 
@@ -139,7 +143,7 @@ def add_review(request):
         try:
             response = post_review(data)
             return JsonResponse({"status": 200})
-        except:
+        except Exception as err:
             return JsonResponse({"status": 401, "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
